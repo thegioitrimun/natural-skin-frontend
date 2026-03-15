@@ -1,5 +1,26 @@
 const LightThemeColors = [
   {
+    name: 'NATURAL_SKIN_THEME',
+    palette: {
+      primary: {
+        main: '#7C9A72',
+        light: '#F0F5EE',
+        dark: '#5F7D55',
+        contrastText: '#ffffff',
+      },
+      secondary: {
+        main: '#D4A574',
+        light: '#FDF5EE',
+        dark: '#C4925F',
+        contrastText: '#ffffff',
+      },
+      background: {
+        default: '#FAF8F5',
+        paper: '#FFFFFF',
+      },
+    },
+  },
+  {
     name: 'BLUE_THEME',
     palette: {
       primary: {

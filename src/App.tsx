@@ -5,8 +5,8 @@ import { RouterProvider } from 'react-router';
 import router from './routes/Router';
 import { CustomizerContext } from 'src/context/CustomizerContext';
 import { useContext } from 'react';
-
-
+import { CartProvider } from './context/CartContext';
+import { WishlistProvider } from './context/WishlistContext';
 
 function App() {
 
@@ -19,7 +19,11 @@ function App() {
     <ThemeProvider theme={theme}>
       <RTL direction={activeDir}>
         <CssBaseline />
-        <RouterProvider router={router} />
+        <CartProvider>
+          <WishlistProvider>
+            <RouterProvider router={router} />
+          </WishlistProvider>
+        </CartProvider>
       </RTL>
     </ThemeProvider>
   );

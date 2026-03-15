@@ -1,5 +1,27 @@
 const DarkThemeColors = [
   {
+    name: 'NATURAL_SKIN_THEME',
+    palette: {
+      primary: {
+        main: '#8FB385',
+        light: '#1E3A1E',
+        dark: '#7C9A72',
+        contrastText: '#ffffff',
+      },
+      secondary: {
+        main: '#D4A574',
+        light: '#3A2A1A',
+        dark: '#C4925F',
+        contrastText: '#ffffff',
+      },
+      background: {
+        default: '#1A2E1A',
+        dark: '#1A2E1A',
+        paper: '#243524',
+      },
+    },
+  },
+  {
     name: 'BLUE_THEME',
     palette: {
       primary: {

@@ -1,0 +1,352 @@
+# Kế hoạch phát triển Frontend — Natural Skin (Website bán mỹ phẩm)
+
+## Tổng quan
+
+Xây dựng website **Natural Skin** — một trang thương mại điện tử chuyên bán mỹ phẩm — dựa trên kiến trúc template **Modernize React v7** (Vite + TypeScript + MUI v7). Website sẽ có 2 phần chính:
+1. **Storefront** (trang công khai cho khách hàng) — giao diện đẹp, hiện đại, phong cách thiên nhiên
+2. **Admin Dashboard** (trang quản trị) — tái sử dụng FullLayout có sẵn từ template
+
+### Tech Stack hiện tại
+| Công nghệ | Phiên bản |
+|---|---|
+| React | 19 RC |
+| Vite | 6.x |
+| TypeScript | 5.8 |
+| MUI (Material UI) | 7.x |
+| React Router | 7.x |
+| Framer Motion | 12.x |
+| MSW (Mock Service Worker) | 2.x |
+| Formik + Yup | latest |
+
+---
+
+## User Review Required
+
+> [!IMPORTANT]
+> **Bảng màu thương hiệu**: Tôi sẽ sử dụng tông màu thiên nhiên (xanh lá sage, be, nâu đất) phù hợp với thương hiệu mỹ phẩm. Bạn có muốn dùng màu khác không?
+
+> [!IMPORTANT]
+> **GitHub Repository**: Tôi sẽ tạo repo mới trên GitHub và push code sau mỗi phase. Bạn muốn tên repo là gì? (Ví dụ: `natural-skin-frontend`)
+
+> [!WARNING]
+> **Xóa bỏ trang demo**: Tôi sẽ xóa các trang demo không liên quan (charts, tables, form demos, MUI components showcase, kanban, calendar, email, chat, notes, tickets, invoice) để giảm kích thước bundle. Các trang eCommerce và blog sẽ được giữ lại và tùy chỉnh.
+
+---
+
+## Phase 1: Foundation & Setup
+
+### Mục tiêu
+Dọn dẹp template, thiết lập Git/GitHub, tùy chỉnh theme theo thương hiệu Natural Skin.
+
+---
+
+#### [MODIFY] [Theme.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/theme/Theme.tsx)
+- Giữ nguyên kiến trúc [BuildTheme](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/theme/Theme.tsx#15-42), cập nhật default theme name
+
+#### [MODIFY] [LightThemeColors.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/theme/LightThemeColors.tsx)
+- Thêm color palette "Natural Skin" với tông màu:
+  - **Primary**: `#7C9A72` (Sage Green)
+  - **Secondary**: `#D4A574` (Warm Beige/Nude)
+  - **Accent**: `#B8860B` (Dark Goldenrod — giống vàng mỹ phẩm)
+  - **Background**: `#FAF8F5` (Off-white ấm)
+  - **Text**: `#3D3D3D` (Charcoal mềm)
+
+#### [MODIFY] [DarkThemeColors.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/theme/DarkThemeColors.tsx)
+- Thêm dark mode tương ứng cho palette "Natural Skin"
+
+#### [MODIFY] [Typography.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/theme/Typography.tsx)
+- Cập nhật font: **Playfair Display** (headings) + **Inter** (body text)
+- Import Google Fonts trong [index.html](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/index.html)
+
+#### [MODIFY] [index.html](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/index.html)
+- Cập nhật title: "Natural Skin — Mỹ Phẩm Thiên Nhiên"
+- Thêm Google Fonts links
+- Thêm meta description, favicon
+
+#### [MODIFY] [config.ts](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/context/config.ts)
+- Đổi default theme sang "NATURAL_SKIN_THEME"
+
+#### [MODIFY] [Router.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/routes/Router.tsx)
+- Xóa routes của demo pages (charts, tables, form demos, UI components)
+- Thêm routes mới cho Storefront
+- Giữ FullLayout routes cho admin, thêm StorefrontLayout routes cho public
+
+---
+
+### Storefront Layout (Mới)
+
+#### [NEW] [StorefrontLayout.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/layouts/storefront/StorefrontLayout.tsx)
+- Layout mới cho trang công khai, bao gồm:
+  - `StorefrontHeader` — Navbar với logo, menu, search, cart icon, user account
+  - `<Outlet />` — Nội dung trang
+  - `StorefrontFooter` — Footer công ty
+
+#### [NEW] [StorefrontHeader.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/layouts/storefront/header/StorefrontHeader.tsx)
+- **Top bar**: Hotline, email, mạng xã hội
+- **Main bar**: Logo "Natural Skin", Search bar, Cart icon (badge số lượng), User menu
+- **Nav bar**: Trang chủ | Sản phẩm | Về chúng tôi | Blog | Liên hệ
+- Responsive hamburger menu cho mobile
+
+#### [NEW] [StorefrontFooter.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/layouts/storefront/footer/StorefrontFooter.tsx)
+- 4 cột: Về Natural Skin | Chính sách | Hỗ trợ | Theo dõi chúng tôi
+- Newsletter subscription form
+- Copyright
+
+---
+
+## Phase 2: Public Storefront Pages (6 trang)
+
+### 2.1. Trang chủ (Homepage)
+
+#### [NEW] [HomePage.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/views/storefront/HomePage.tsx)
+Trang gồm các section:
+
+| Section | Mô tả |
+|---|---|
+| **Hero Banner** | Carousel ảnh lớn với CTA "Khám phá ngay" — dùng `react-slick` |
+| **Danh mục nổi bật** | Grid 4-6 categories (Chăm sóc da, Trang điểm, Chống nắng, Dưỡng thể...) |
+| **Sản phẩm bán chạy** | Product cards carousel (8-12 sản phẩm) |
+| **Banner quảng cáo** | 2 banners song song (ưu đãi, bộ sưu tập mới) |
+| **Sản phẩm mới** | Grid 4-8 sản phẩm mới nhất |
+| **Thương hiệu nổi bật** | Logo row: Innisfree, The Ordinary, CeraVe, La Roche-Posay... |
+| **Blog mới nhất** | 3 bài blog cards |
+| **Testimonials** | Customer reviews carousel |
+| **Newsletter** | Form đăng ký nhận tin |
+
+---
+
+### 2.2. Trang sản phẩm (Products)
+
+#### [NEW] [ProductsPage.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/views/storefront/ProductsPage.tsx)
+- **Sidebar bộ lọc** (desktop) / Bottom sheet (mobile):
+  - Lọc theo danh mục
+  - Lọc theo thương hiệu
+  - Lọc theo giá (range slider)
+  - Lọc theo loại da (Da dầu, Da khô, Da nhạy cảm, Da hỗn hợp)
+  - Lọc theo đánh giá
+- **Product Grid**: 3 cột desktop, 2 cột tablet, 1 cột mobile
+- **Sort**: Mới nhất, Bán chạy, Giá thấp→cao, Giá cao→thấp
+- **Pagination**: Load more hoặc phân trang
+- Tái sử dụng & tùy chỉnh `EcommerceContext` có sẵn
+
+#### [NEW] [ProductCard.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/components/storefront/ProductCard.tsx)
+- Ảnh sản phẩm (hover: hiện ảnh thứ 2)
+- Badge: "Mới", "Sale -30%", "Hot"
+- Tên sản phẩm, thương hiệu
+- Rating stars
+- Giá (giá gốc gạch ngang + giá sale)
+- Nút "Thêm vào giỏ" (icon)
+- Nút "Xem nhanh" (quickview modal)
+
+---
+
+### 2.3. Chi tiết sản phẩm (Product Detail)
+
+#### [NEW] [ProductDetailPage.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/views/storefront/ProductDetailPage.tsx)
+- **Image Gallery**: Ảnh lớn + thumbnails, zoom, lightbox (dùng `fslightbox-react`)
+- **Thông tin SP**: Tên, thương hiệu, rating, giá, mô tả ngắn
+- **Chọn variant**: Size/dung tích, màu sắc
+- **Số lượng + Thêm vào giỏ + Mua ngay**
+- **Tabs chi tiết**:
+  - Mô tả chi tiết (hỗ trợ Markdown)
+  - Thành phần (Ingredients)
+  - Hướng dẫn sử dụng
+  - Đánh giá & Nhận xét
+- **Sản phẩm liên quan** (carousel)
+- **Sản phẩm đã xem gần đây**
+
+---
+
+### 2.4. Về chúng tôi (About)
+
+#### [NEW] [AboutPage.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/views/storefront/AboutPage.tsx)
+- Hero banner với tagline thương hiệu
+- Câu chuyện thương hiệu (timeline hoặc storytelling)
+- Sứ mệnh & Giá trị cốt lõi (icon cards)
+- Đội ngũ sáng lập (ảnh + bio)
+- Cam kết chất lượng (certifications, badges)
+- CTA liên hệ
+
+---
+
+### 2.5. Blog / Tin tức
+
+#### [NEW] [BlogPage.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/views/storefront/BlogPage.tsx)
+- Blog grid/list layout
+- Danh mục blog (Chăm sóc da, Makeup tips, Tin tức thương hiệu)
+- Search blog
+- Tái sử dụng & tùy chỉnh `BlogContext` sẵn có
+
+#### [NEW] [BlogDetailPage.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/views/storefront/BlogDetailPage.tsx)
+- Ảnh bìa, tiêu đề, tác giả, ngày đăng
+- Nội dung bài viết (Markdown rendered)
+- Tags
+- Bài viết liên quan
+- Chia sẻ mạng xã hội
+
+---
+
+### 2.6. Liên hệ (Contact)
+
+#### [NEW] [ContactPage.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/views/storefront/ContactPage.tsx)
+- Form liên hệ (Formik + Yup validation): Họ tên, Email, SĐT, Nội dung
+- Thông tin công ty: Địa chỉ, SĐT, Email, giờ làm việc
+- Google Maps embed
+- Mạng xã hội links
+
+---
+
+## Phase 3: E-Commerce Features
+
+### 3.1. Giỏ hàng (Cart)
+
+#### [NEW] [CartContext.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/context/CartContext/index.tsx)
+- State management: items, quantities, totals
+- Actions: add, remove, update quantity, clear
+- Persist to localStorage
+
+#### [NEW] [CartDrawer.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/components/storefront/CartDrawer.tsx)
+- Sidebar drawer (mở từ phải)
+- Danh sách sản phẩm, ảnh nhỏ, +/-, xóa
+- Tổng tiền, phí ship
+- Nút "Thanh toán"
+
+#### [NEW] [CartPage.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/views/storefront/CartPage.tsx)
+- Trang giỏ hàng đầy đủ (table layout)
+- Mã giảm giá
+- Ước tính phí vận chuyển
+
+---
+
+### 3.2. Thanh toán (Checkout)
+
+#### [NEW] [CheckoutPage.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/views/storefront/CheckoutPage.tsx)
+- Multi-step form (dùng MUI Stepper):
+  1. **Thông tin giao hàng**: Họ tên, SĐT, Địa chỉ, Tỉnh/Thành, Quận/Huyện
+  2. **Phương thức vận chuyển**: Giao nhanh, Giao tiêu chuẩn
+  3. **Phương thức thanh toán**: COD, Chuyển khoản, Ví điện tử
+  4. **Xác nhận đơn** + Đặt hàng
+- Trang xác nhận đơn hàng thành công
+
+---
+
+### 3.3. Tài khoản (Account)
+
+#### [NEW] [LoginPage.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/views/storefront/auth/LoginPage.tsx)
+#### [NEW] [RegisterPage.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/views/storefront/auth/RegisterPage.tsx)
+#### [NEW] [AccountPage.tsx](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/views/storefront/auth/AccountPage.tsx)
+- Tabs: Thông tin cá nhân, Lịch sử đơn hàng, Sản phẩm yêu thích, Đổi mật khẩu
+
+---
+
+## Phase 4: Admin Dashboard
+
+Tái sử dụng [FullLayout](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/layouts/full/FullLayout.tsx#31-89) có sẵn (đã có sidebar, header, customizer). Chỉ cần tùy chỉnh:
+
+#### [MODIFY] [Sidebar MenuItems](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/layouts/full/vertical/sidebar)
+- Cập nhật menu:
+  - Dashboard (tổng quan)
+  - Quản lý sản phẩm (Danh sách, Thêm mới, Danh mục)
+  - Quản lý đơn hàng
+  - Quản lý khách hàng
+  - Blog (Bài viết, Danh mục)
+  - Cài đặt
+
+---
+
+## Phase 5: Polish & SEO
+
+- Responsive audit trên mọi breakpoint
+- `react-helmet` cho từng trang: title, meta description, canonical, Open Graph  
+- Lazy loading images, code splitting đã có sẵn qua `Loadable`
+- Accessibility audit (contrast, alt text, keyboard nav)
+- Performance: bundle analyze, tree shaking
+
+---
+
+## Mock Data & API
+
+#### [MODIFY] [MSW handlers](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/api/mocks)
+- Tùy chỉnh mock data cho sản phẩm mỹ phẩm (thay vì products demo)
+- Thêm handlers cho: Products, Categories, Brands, Blog, Cart, Orders
+
+#### [NEW] [types/storefront.ts](file:///Users/PHUC/Downloads/modernize-react-v7%202/packages/typescript/main/src/types/storefront.ts)
+- TypeScript interfaces: `Product`, `ProductCategory`, `Brand`, `CartItem`, `Order`, `BlogPost`, `Review`
+
+---
+
+## Cấu trúc thư mục mới
+
+```
+src/
+├── layouts/
+│   ├── full/          (Admin — giữ nguyên)
+│   ├── blank/         (Auth pages — giữ nguyên)
+│   └── storefront/    ★ MỚI
+│       ├── StorefrontLayout.tsx
+│       ├── header/
+│       │   └── StorefrontHeader.tsx
+│       └── footer/
+│           └── StorefrontFooter.tsx
+├── views/
+│   ├── storefront/    ★ MỚI
+│   │   ├── HomePage.tsx
+│   │   ├── ProductsPage.tsx
+│   │   ├── ProductDetailPage.tsx
+│   │   ├── AboutPage.tsx
+│   │   ├── BlogPage.tsx
+│   │   ├── BlogDetailPage.tsx
+│   │   ├── ContactPage.tsx
+│   │   ├── CartPage.tsx
+│   │   ├── CheckoutPage.tsx
+│   │   └── auth/
+│   │       ├── LoginPage.tsx
+│   │       ├── RegisterPage.tsx
+│   │       └── AccountPage.tsx
+│   └── dashboard/     (Admin — giữ nguyên)
+├── components/
+│   └── storefront/    ★ MỚI
+│       ├── ProductCard.tsx
+│       ├── CartDrawer.tsx
+│       ├── CategoryCard.tsx
+│       ├── HeroBanner.tsx
+│       ├── TestimonialCard.tsx
+│       └── ...
+├── context/
+│   ├── CartContext/    ★ MỚI
+│   └── EcommerceContext/ (tùy chỉnh)
+└── types/
+    └── storefront.ts  ★ MỚI
+```
+
+---
+
+## Lộ trình GitHub Push
+
+| Milestone | Nội dung push | Branch |
+|---|---|---|
+| **v0.1** | Phase 1: Foundation + Theme + StorefrontLayout | `main` |
+| **v0.2** | Phase 2: Homepage + Products + Product Detail | `main` |
+| **v0.3** | Phase 2 (tt): About + Blog + Contact | `main` |
+| **v0.4** | Phase 3: Cart + Checkout + Account | `main` |
+| **v0.5** | Phase 4: Admin Dashboard | `main` |
+| **v1.0** | Phase 5: Polish, SEO, Final | `main` |
+
+Sau mỗi phase, code sẽ được commit và push lên GitHub.
+
+---
+
+## Verification Plan
+
+### Automated
+- `npm run build` — Đảm bảo TypeScript compile không lỗi sau mỗi phase
+- `npm run lint` — ESLint check
+
+### Manual Verification (Browser)
+1. **Sau Phase 1**: Chạy `npm run dev`, kiểm tra trang trắng load đúng theme colors, font mới
+2. **Sau Phase 2**: Duyệt qua tất cả 6 trang storefront, kiểm tra layout responsive (desktop/tablet/mobile)
+3. **Sau Phase 3**: Test flow: Thêm SP vào giỏ → Xem giỏ → Checkout → Xác nhận
+4. **Sau Phase 4**: Kiểm tra admin dashboard, CRUD sản phẩm
+5. **Sau Phase 5**: Lighthouse audit (Performance, SEO, Accessibility scores)
+
+Mỗi lần verify, tôi sẽ chạy dev server và kiểm tra trên browser.
