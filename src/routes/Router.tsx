@@ -48,6 +48,7 @@ const WishlistPage = Loadable(lazy(() => import('../views/storefront/WishlistPag
 const OrderSuccessPage = Loadable(lazy(() => import('../views/storefront/OrderSuccessPage')));
 const LoginPage = Loadable(lazy(() => import('../views/storefront/auth/LoginPage')));
 const RegisterPage = Loadable(lazy(() => import('../views/storefront/auth/RegisterPage')));
+const AccountPage = Loadable(lazy(() => import('../views/storefront/AccountPage')));
 
 const Router = [
   // ===== STOREFRONT (Public) =====
@@ -66,6 +67,7 @@ const Router = [
       { path: '/checkout', element: <CheckoutPage /> },
       { path: '/wishlist', element: <WishlistPage /> },
       { path: '/order-success', element: <OrderSuccessPage /> },
+      { path: '/account', element: <AccountPage /> },
       { path: '*', element: <Navigate to="/" /> },
     ],
   },
