@@ -19,7 +19,6 @@ import {
   useMediaQuery,
   Stack,
   Divider,
-  InputBase,
   alpha,
 } from '@mui/material';
 import {
@@ -38,6 +37,7 @@ import {
 import { Link, useNavigate } from 'react-router';
 import { useCart } from '../../../context/CartContext';
 import CartDrawer from '../../../components/storefront/CartDrawer';
+import SearchAutocomplete from '../../../components/storefront/SearchAutocomplete';
 
 const NAV_ITEMS = [
   { label: 'Trang chủ', path: '/' },
@@ -51,7 +51,6 @@ const StorefrontHeader = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const navigate = useNavigate();
   const { state: cartState } = useCart();
@@ -216,33 +215,14 @@ const StorefrontHeader = () => {
             {/* Right Actions */}
             <Stack direction="row" spacing={0.5} alignItems="center">
               {/* Search */}
-              {searchOpen && !isMobile ? (
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    bgcolor: alpha(theme.palette.primary.main, 0.06),
-                    borderRadius: 2,
-                    px: 1.5,
-                    mr: 1,
-                    transition: 'all 0.3s ease',
-                  }}
-                >
-                  <IconSearch size={18} color={theme.palette.text.secondary} />
-                  <InputBase
-                    placeholder="Tìm kiếm sản phẩm..."
-                    autoFocus
-                    sx={{
-                      ml: 1,
-                      fontSize: '0.875rem',
-                      width: 200,
-                    }}
-                    onBlur={() => setSearchOpen(false)}
-                  />
-                </Box>
-              ) : (
+              <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+                <SearchAutocomplete />
+              </Box>
+
+              {/* Mobile Search Icon */}
+              {isMobile && (
                 <IconButton
-                  onClick={() => setSearchOpen(true)}
+                  onClick={() => navigate('/products')}
                   sx={{ color: theme.palette.text.primary }}
                 >
                   <IconSearch size={22} />

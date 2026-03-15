@@ -6,6 +6,7 @@ import { Outlet } from 'react-router';
 import StorefrontHeader from './header/StorefrontHeader';
 import StorefrontFooter from './footer/StorefrontFooter';
 import ScrollToTop from '../../components/shared/ScrollToTop';
+import NewsletterPopup from '../../components/storefront/NewsletterPopup';
 
 const PageWrapper = styled('div')(() => ({
   display: 'flex',
@@ -30,6 +31,7 @@ const StorefrontLayout = () => {
         </ScrollToTop>
       </ContentWrapper>
       <StorefrontFooter />
+      <NewsletterPopup />
     </PageWrapper>
   );
 };

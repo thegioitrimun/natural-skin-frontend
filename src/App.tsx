@@ -7,6 +7,9 @@ import { CustomizerContext } from 'src/context/CustomizerContext';
 import { useContext } from 'react';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
+import { RecentlyViewedProvider } from './context/RecentlyViewedContext';
+import { CouponProvider } from './context/CouponContext';
+import SEOMeta from './components/storefront/SEOMeta';
 
 function App() {
 
@@ -19,9 +22,14 @@ function App() {
     <ThemeProvider theme={theme}>
       <RTL direction={activeDir}>
         <CssBaseline />
+        <SEOMeta />
         <CartProvider>
           <WishlistProvider>
-            <RouterProvider router={router} />
+            <RecentlyViewedProvider>
+              <CouponProvider>
+                <RouterProvider router={router} />
+              </CouponProvider>
+            </RecentlyViewedProvider>
           </WishlistProvider>
         </CartProvider>
       </RTL>
